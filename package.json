@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "build": "cd stock-market-sim-shared && npm run build && cd .. && cd stock-market-sim-server && npm run build && cd .. && cd stock-market-sim-client && npm run build",
-    "start": "cd stock-market-sim-server && npm start"
+    "start": "cd stock-market-sim-server && npm start && open http://localhost:3000",
+    "start:client": "cd stock-market-sim-client && npm start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "open": "^10.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3"
   },

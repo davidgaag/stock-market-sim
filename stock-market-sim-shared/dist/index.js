@@ -1,7 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthToken = exports.User = void 0;
-var User_1 = require("./domain/model/User");
+exports.AuthResponse = exports.LogOutRequest = exports.RegisterRequest = exports.LoginRequest = exports.AppRequest = exports.AuthToken = exports.User = void 0;
+var User_1 = require("./model/domain/User");
 Object.defineProperty(exports, "User", { enumerable: true, get: function () { return User_1.User; } });
-var AuthToken_1 = require("./domain/model/AuthToken");
+var AuthToken_1 = require("./model/domain/AuthToken");
 Object.defineProperty(exports, "AuthToken", { enumerable: true, get: function () { return AuthToken_1.AuthToken; } });
+var Request_1 = require("./model/net/Request");
+Object.defineProperty(exports, "AppRequest", { enumerable: true, get: function () { return Request_1.AppRequest; } });
+Object.defineProperty(exports, "LoginRequest", { enumerable: true, get: function () { return Request_1.LoginRequest; } });
+Object.defineProperty(exports, "RegisterRequest", { enumerable: true, get: function () { return Request_1.RegisterRequest; } });
+Object.defineProperty(exports, "LogOutRequest", { enumerable: true, get: function () { return Request_1.LogOutRequest; } });
+var Response_1 = require("./model/net/Response");
+Object.defineProperty(exports, "AuthResponse", { enumerable: true, get: function () { return Response_1.AuthResponse; } });

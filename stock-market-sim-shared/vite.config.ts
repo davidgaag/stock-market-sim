@@ -5,7 +5,7 @@ export default defineConfig({
    build: {
       lib: {
          entry: 'src/index.ts',
-         name: 'shared',
+         name: 'stock-market-sim-shared',
          formats: ['es'],
       },
       rollupOptions: {
