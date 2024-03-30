@@ -6,9 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      external: ['stock-market-sim-shared', 'buffer']
+      external: []
     }
   }
 })
-
-// TODO: External list, what is it? Are the ones we have correct/needed?
