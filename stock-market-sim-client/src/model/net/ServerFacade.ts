@@ -3,7 +3,7 @@ import { ClientCommunicator } from "./ClientCommunicator";
 
 export class ServerFacade {
 
-   private SERVER_URL = ""; // TODO: Set this value.
+   private SERVER_URL = "http://localhost:"; // TODO: Set this value.
 
    private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
 

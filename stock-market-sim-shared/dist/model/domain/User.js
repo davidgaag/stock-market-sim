@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
-class User {
+export class User {
     _firstName;
     _lastName;
     _alias;
@@ -55,4 +52,3 @@ class User {
         return JSON.stringify(this);
     }
 }
-exports.User = User;

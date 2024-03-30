@@ -104,7 +104,6 @@ const Register = () => {
     <AuthenticationFormLayout
       headingText="Please Register"
       submitButtonLabel="Register"
-      oAuthHeading="Register with:"
       inputFieldGenerator={inputFieldGenerator}
       switchAuthenticationMethodGenerator={switchAuthenticationMethodGenerator}
       setRememberMe={setRememberMe}

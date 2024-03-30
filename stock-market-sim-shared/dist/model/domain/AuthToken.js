@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthToken = void 0;
-const uuid_1 = require("uuid");
-class AuthToken {
+import { v4 as uuid } from "uuid";
+export class AuthToken {
     _token;
     _timestamp;
     static Generate() {
@@ -12,7 +9,7 @@ class AuthToken {
     }
     static generateToken() {
         try {
-            return (0, uuid_1.v4)().toString();
+            return uuid().toString();
         }
         catch (error) {
             // UUID not available. Generating a random string. Making it 64 characters to reduce the liklihood of a duplicate
@@ -54,4 +51,3 @@ class AuthToken {
         return JSON.stringify(this);
     }
 }
-exports.AuthToken = AuthToken;

@@ -1,5 +1,5 @@
 {
-   "name": "stock-market-app-shared",
+   "name": "stock-market-sim-shared",
    "private": true,
    "version": "0.0.0",
    "main": "dist/index.js",

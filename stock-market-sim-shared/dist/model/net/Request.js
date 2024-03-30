@@ -1,12 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LogOutRequest = exports.RegisterRequest = exports.LoginRequest = exports.AppRequest = void 0;
-const AuthToken_1 = require("../domain/AuthToken");
-class AppRequest {
+import { AuthToken } from "../domain/AuthToken";
+export class AppRequest {
 }
-exports.AppRequest = AppRequest;
 // TODO: M4: Remove duplication - AuthToken Request that can be subclassed 
-class LoginRequest extends AppRequest {
+export class LoginRequest extends AppRequest {
     _username;
     _password;
     constructor(username, password) {
@@ -21,8 +17,7 @@ class LoginRequest extends AppRequest {
         return this._password;
     }
 }
-exports.LoginRequest = LoginRequest;
-class RegisterRequest extends AppRequest {
+export class RegisterRequest extends AppRequest {
     _firstName;
     _lastName;
     _alias;
@@ -52,8 +47,7 @@ class RegisterRequest extends AppRequest {
         return this._imageStringBase64;
     }
 }
-exports.RegisterRequest = RegisterRequest;
-class LogOutRequest extends AppRequest {
+export class LogOutRequest extends AppRequest {
     _authToken;
     constructor(authToken) {
         super();
@@ -64,7 +58,7 @@ class LogOutRequest extends AppRequest {
     }
     static fromJson(json) {
         const jsonObject = json;
-        const deserializedToken = AuthToken_1.AuthToken.fromJson(JSON.stringify(jsonObject._authToken));
+        const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._authToken));
         if (deserializedToken === null) {
             throw new Error("LogOutRequest, could not deserialize token with json:\n" +
                 JSON.stringify(jsonObject._authToken));
@@ -72,4 +66,3 @@ class LogOutRequest extends AppRequest {
         return new LogOutRequest(deserializedToken);
     }
 }
-exports.LogOutRequest = LogOutRequest;

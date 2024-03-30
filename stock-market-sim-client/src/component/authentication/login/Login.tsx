@@ -63,7 +63,6 @@ const Login = (props: Props) => {
       <AuthenticationFormLayout
          headingText="Please Sign In"
          submitButtonLabel="Sign in"
-         oAuthHeading="Sign in with:"
          inputFieldGenerator={inputFieldGenerator}
          switchAuthenticationMethodGenerator={switchAuthenticationMethodGenerator}
          setRememberMe={setRememberMe}

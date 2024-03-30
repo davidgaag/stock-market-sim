@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthResponse = exports.TweeterResponse = void 0;
-const AuthToken_1 = require("../domain/AuthToken");
-const User_1 = require("../domain/User");
-class TweeterResponse {
+import { AuthToken } from "../domain/AuthToken";
+import { User } from "../domain/User";
+export class TweeterResponse {
     _success;
     _message;
     constructor(success, message = null) {
@@ -21,8 +18,7 @@ class TweeterResponse {
         return new TweeterResponse(jsonObject._success, jsonObject._message);
     }
 }
-exports.TweeterResponse = TweeterResponse;
-class AuthResponse extends TweeterResponse {
+export class AuthResponse extends TweeterResponse {
     _user;
     _token;
     constructor(success, user, token, message) {
@@ -38,12 +34,12 @@ class AuthResponse extends TweeterResponse {
     }
     static fromJson(json) {
         const jsonObject = json;
-        const deserializedUser = User_1.User.fromJson(JSON.stringify(jsonObject._user));
+        const deserializedUser = User.fromJson(JSON.stringify(jsonObject._user));
         if (deserializedUser === null) {
             throw new Error("AuthResponse, could not deserialize user with json:\n" +
                 JSON.stringify(jsonObject._user));
         }
-        const deserializedToken = AuthToken_1.AuthToken.fromJson(JSON.stringify(jsonObject._token));
+        const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._token));
         if (deserializedToken === null) {
             throw new Error("AuthResponse, could not deserialize token with json:\n" +
                 JSON.stringify(jsonObject._token));
@@ -51,4 +47,3 @@ class AuthResponse extends TweeterResponse {
         return new AuthResponse(jsonObject._success, deserializedUser, deserializedToken, jsonObject._message);
     }
 }
-exports.AuthResponse = AuthResponse;

@@ -1,4 +1,4 @@
-import { AppRequest } from "stock-market-sim-shared";
+import { AppRequest } from "stock-market-sim-shared"
 
 export class ClientCommunicator {
    private SERVER_URL: string;

@@ -1,7 +1,6 @@
 interface Props {
   headingText: string;
   submitButtonLabel: string;
-  oAuthHeading: string;
   inputFieldGenerator: () => JSX.Element;
   switchAuthenticationMethodGenerator: () => JSX.Element;
   setRememberMe: (value: boolean) => void;
@@ -25,9 +24,6 @@ const AuthenticationFormLayout = (props: Props) => {
             <h1 className="h3 mb-3 fw-normal">{props.headingText}</h1>
 
             {props.inputFieldGenerator()}
-
-            <h1 className="h4 mb-3 fw-normal">Or</h1>
-            <h1 className="h5 mb-3 fw-normal">{props.oAuthHeading}</h1>
 
             <div className="checkbox mb-3">
               <label>

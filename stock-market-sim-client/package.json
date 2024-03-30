@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/uuid": "^9.0.8",
     "bootstrap": "^5.3.3",
+    "buffer": "^6.0.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
@@ -29,6 +30,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
-  }
+    "vite": "^5.2.0",
+    "vite-plugin-svgr": "^4.2.0"
+  },
+  "main": "src/index.tsx"
 }
