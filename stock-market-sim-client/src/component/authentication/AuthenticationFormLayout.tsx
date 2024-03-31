@@ -16,7 +16,7 @@ const AuthenticationFormLayout = (props: Props) => {
           <form>
             <img
               className="mb-4"
-              src="/bird-logo-64.png"
+              src="/src/assets/react.svg"
               alt=""
               width="72"
               height="72"

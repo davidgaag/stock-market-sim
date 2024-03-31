@@ -9,9 +9,9 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 80;
 app.use('/', api_1.default);
-app.use(express.static(path_1.default.join(__dirname, '../../stock-market-sim-client/dist')));
+app.use(express.static(path_1.default.join(__dirname, '../public')));
 app.get('*', (req, res) => {
-    res.sendFile(path_1.default.join(__dirname, '../../stock-market-sim-client/dist/index.html'));
+    res.sendFile(path_1.default.join(__dirname, '../public/index.html'));
 });
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

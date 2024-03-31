@@ -8,10 +8,10 @@ const port = process.env.PORT || 80;
 
 app.use('/', apiRoutes);
 
-app.use(express.static(path.join(__dirname, '../../stock-market-sim-client/dist')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('*', (req: Request, res: Response) => {
-   res.sendFile(path.join(__dirname, '../../stock-market-sim-client/dist/index.html'));
+   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.listen(port, () => {
