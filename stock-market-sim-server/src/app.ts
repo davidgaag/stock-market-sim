@@ -1,12 +1,17 @@
 import { Request, Response } from 'express';
 import apiRoutes from './api';
+import authRoutes from './auth';
 import path from 'path';
 
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 80;
 
+app.use('/auth', authRoutes);
+
 app.use('/', apiRoutes);
+
+// TODO: auth middleware
 
 app.use(express.static(path.join(__dirname, '../public')));
 

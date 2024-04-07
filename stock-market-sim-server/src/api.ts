@@ -1,16 +1,24 @@
 import { Router, Request, Response } from 'express';
+import { getQuote } from './net/finnhub';
+
 const router = Router();
 
-router.get('/service/login', (req: Request, res: Response) => {
-   res.send('Login endpoint');
+router.get('/quote/:symbol', (req: Request, res: Response) => {
+   // TODO: auth check
+   const symbol = req.params.symbol;
+   if (isAlphabetical(symbol)) {
+      getQuote(symbol).then((quote) => {
+         res.send(quote);
+      }).catch((err) => {
+         res.status(500).send
+      });
+   } else {
+      res.status(400).send('Invalid symbol');
+   }
 });
 
-router.get('/service/register', (req: Request, res: Response) => {
-   res.send('Register endpoint');
-});
-
-router.get('/service/logout', (req: Request, res: Response) => {
-   res.send('Logout endpoint');
-});
+function isAlphabetical(str: string): boolean {
+   return /^[a-zA-Z]+$/.test(str);
+}
 
 export default router;

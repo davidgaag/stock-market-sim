@@ -3,8 +3,6 @@ import { User } from "../domain/User";
 
 export class AppRequest { }
 
-// TODO: M4: Remove duplication - AuthToken Request that can be subclassed 
-
 export class LoginRequest extends AppRequest {
    private _username: string;
    private _password: string;

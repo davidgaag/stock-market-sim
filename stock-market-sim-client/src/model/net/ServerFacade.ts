@@ -8,21 +8,21 @@ export class ServerFacade {
    private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
 
    async login(request: LoginRequest): Promise<AuthResponse> {
-      const endpoint = "/service/login";
+      const endpoint = "/login";
       const response: JSON = await this.clientCommunicator.doPost<LoginRequest>(request, endpoint);
 
       return AuthResponse.fromJson(response);
    }
 
    async register(request: RegisterRequest): Promise<AuthResponse> {
-      const endpoint = "/service/register";
+      const endpoint = "/register";
       const response: JSON = await this.clientCommunicator.doPost<RegisterRequest>(request, endpoint);
 
       return AuthResponse.fromJson(response);
    }
 
    async logout(request: LogOutRequest): Promise<void> {
-      const endpoint = "/service/logout";
+      const endpoint = "/logout";
       await this.clientCommunicator.doPost<LogOutRequest>(request, endpoint);
    }
 }
