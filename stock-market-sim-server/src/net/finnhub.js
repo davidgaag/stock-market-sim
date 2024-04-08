@@ -1,4 +1,5 @@
-const finnhub = require('finnhub');
+import pkg from 'finnhub';
+const finnhub = pkg;
 
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
 api_key.apiKey = process.env.FINNHUB_API_KEY;
@@ -16,4 +17,4 @@ function getQuote(symbol) {
    });
 }
 
-module.exports = { getQuote };
+export { getQuote }

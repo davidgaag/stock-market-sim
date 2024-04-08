@@ -1,8 +1,8 @@
-const client = require('./PostgresSetup.js');
+import client from './PostgresSetup.js';
 
-async function putAuthToken(username, token, expiration) {
+async function putAuthToken(userId, token, expiration) {
    client.query(`INSERT INTO auth_token (user_id, token, expiration) VALUES ($1, $2, $3)`,
-      [username, token, expiration]);
+      [userId, token, expiration]);
 }
 
 async function getAuthToken(token) {
@@ -16,4 +16,4 @@ async function deleteAuthToken(token) {
       [token]);
 }
 
-module.exports = { putAuthToken, getAuthToken, deleteAuthToken }
+export { putAuthToken, getAuthToken, deleteAuthToken }

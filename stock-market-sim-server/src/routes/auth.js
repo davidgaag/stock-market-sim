@@ -1,13 +1,13 @@
-const { Router } = require('express');
-const { getUser, putUser } = require('../db/UserDao.js');
-const { putAuthToken, deleteAuthToken } = require('../db/AuthTokenDao.js');
-const User = require('../../shared/model/domain/User.js').User;
-const AuthToken = require('../../shared/model/domain/AuthToken.js').AuthToken;
-const AuthResponse = require('../../shared/model/net/Response.js').AuthResponse;
-const AppResponse = require('../../shared/model/net/Response.js').AppResponse;
-const bcrypt = require('bcryptjs');
+import { Router } from 'express';
+import { getUser, putUser } from '../db/UserDao.js';
+import { putAuthToken, deleteAuthToken } from '../db/AuthTokenDao.js';
+import { User } from '../../shared/model/domain/User.js';
+import { AuthToken } from '../../shared/model/domain/AuthToken.js';
+import { AuthResponse, AppResponse } from '../../shared/model/net/Response.js';
+import bcrypt from 'bcryptjs';
 
 const router = Router();
+
 const invalidRequest = new AppResponse(false, 'Invalid request');
 const usernameExists = new AppResponse(false, 'Username already exists');
 const loginFailed = new AppResponse(false, 'Username or password is incorrect');
@@ -15,6 +15,7 @@ const loginFailed = new AppResponse(false, 'Username or password is incorrect');
 router.post('/login', async (req, res) => {
    if (!req.body.username || !req.body.password) {
       res.status(400).json(invalidRequest);
+      return;
    }
 
    const username = req.body.username;
@@ -23,6 +24,7 @@ router.post('/login', async (req, res) => {
    const userRow = await getUser(username);
    if (!userRow) {
       res.status(400).json(loginFailed);
+      return;
    }
 
    if (await comparePasswords(password, userRow.password)) {
@@ -38,6 +40,7 @@ router.post('/login', async (req, res) => {
 router.post('/register', async (req, res) => {
    if (!req.body.alias || !req.body.password) {
       res.status(400).json(invalidRequest);
+      return;
    }
 
    const username = req.body.alias;
@@ -45,18 +48,20 @@ router.post('/register', async (req, res) => {
 
    if (await getUser(username)) {
       res.status(409).json(usernameExists);
+      return;
    }
 
-   await putUser(username, await hashPassword(password));
+   const userRow = await putUser(username, await hashPassword(password));
    const user = generateUser(username);
    const token = AuthToken.Generate();
-   await putAuthToken(username, token.token, token.timestamp + 1000 * 60 * 60 * 24);
+   await putAuthToken(userRow.id, token.token, token.timestamp + 1000 * 60 * 60 * 24);
    res.status(201).json(generateAuthResponse(user, token));
 });
 
 router.post('/logout', async (req, res) => {
    if (!req.body.token) {
       res.status(400).json(invalidRequest);
+      return;
    }
 
    const token = req.body.token;
@@ -85,4 +90,4 @@ function generateAuthResponse(user, token) {
    return new AuthResponse(true, user, token, 'Login successful');
 }
 
-module.exports = router;
+export default router;

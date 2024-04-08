@@ -1,8 +1,9 @@
-const client = require('./PostgresSetup.js');
+import client from './PostgresSetup.js';
 
 async function putUser(username, password) {
-   await client.query(`INSERT INTO app_user (username, password) VALUES ($1, $2)`,
+   const res = await client.query(`INSERT INTO app_user (username, password) VALUES ($1, $2) RETURNING *`,
       [username, password]);
+   return res.rows[0];
 }
 
 async function getUser(username) {
@@ -11,4 +12,4 @@ async function getUser(username) {
    return res.rows[0];
 }
 
-module.exports = { putUser, getUser };
+export { putUser, getUser }

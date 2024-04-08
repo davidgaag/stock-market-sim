@@ -1,4 +1,4 @@
-import { AuthToken } from "../domain/AuthToken";
+import { AuthToken } from "../domain/AuthToken.js";
 export declare class AppRequest {
 }
 export declare class LoginRequest extends AppRequest {

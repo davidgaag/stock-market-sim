@@ -1,5 +1,5 @@
-import { AuthToken } from "../domain/AuthToken";
-import { User } from "../domain/User";
+import { AuthToken } from "../domain/AuthToken.js";
+import { User } from "../domain/User.js";
 export declare class AppResponse {
     private _success;
     private _message;

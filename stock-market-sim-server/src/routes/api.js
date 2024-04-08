@@ -1,8 +1,10 @@
-const { Router } = require('express');
-const { getQuote } = require('../net/finnhub.js');
-const { getAuthToken } = require('../db/AuthTokenDao.js');
+import { Router } from 'express';
+import { getQuote } from '../net/finnhub.js';
+import { getAuthToken } from '../db/AuthTokenDao.js';
 
 const router = Router();
+
+// TODO: Fix, use right requests, etc.
 
 router.use((req, res, next) => {
    console.log("API request: " + req.url + " " + JSON.stringify(req.body));
@@ -42,4 +44,4 @@ function isAlphabetical(str) {
    return /^[a-zA-Z]+$/.test(str);
 }
 
-module.exports = router;
+export default router;
