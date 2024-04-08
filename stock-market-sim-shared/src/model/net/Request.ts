@@ -22,6 +22,37 @@ export class LoginRequest extends AppRequest {
    }
 }
 
+export class AuthTokenRequest extends AppRequest {
+   private _authToken: AuthToken;
+
+   constructor(authToken: AuthToken) {
+      super();
+      this._authToken = authToken;
+   }
+
+   get authToken() {
+      return this._authToken;
+   }
+
+   static fromJson(json: JSON) {
+      interface AuthTokenRequestJson {
+         _authToken: AuthToken;
+      }
+
+      const jsonObject: AuthTokenRequestJson = json as unknown as AuthTokenRequestJson;
+      const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._authToken));
+
+      if (deserializedToken === null) {
+         throw new Error(
+            "AuthTokenRequest, could not deserialize token with json:\n" +
+            JSON.stringify(jsonObject._authToken)
+         );
+      }
+      return new AuthTokenRequest(deserializedToken);
+   }
+
+}
+
 export class RegisterRequest extends AppRequest {
    private _firstName: string;
    private _lastName: string;

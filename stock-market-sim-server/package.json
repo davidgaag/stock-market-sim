@@ -16,10 +16,12 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.19.2",
     "finnhub": "^1.2.18",
-    "pg": "^8.11.4"
+    "pg": "^8.11.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/pg": "^8.11.4",
+    "stock-market-sim-shared": "file:../stock-market-sim-shared",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3"
   }
