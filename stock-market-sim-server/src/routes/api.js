@@ -1,23 +1,25 @@
-import { Router, Request, Response } from 'express';
-import { getQuote } from '../net/finnhub';
-import { getAuthToken } from '../db/AuthTokenDao';
-import { TweeterResponse } from 'stock-market-sim-shared/dist/model/net/Response';
+const { Router } = require('express');
+const { getQuote } = require('../net/finnhub.js');
+const { getAuthToken } = require('../db/AuthTokenDao.js');
 
 const router = Router();
 
 router.use((req, res, next) => {
-   if (!req.body.authToken || req.body.alias) {
-      res.status(401).json(new TweeterResponse(false, "Unauthorized"));
+   console.log("API request: " + req.url + " " + JSON.stringify(req.body));
+
+   if (!req.body.authToken || !req.body.alias) {
+      res.status(401).json('Unauthorized');
+      return;
    }
 
    const authToken = req.body.authToken;
    const dbToken = getAuthToken(authToken);
    if (!dbToken) {
-      res.status(401).json(new TweeterResponse(false, "Unauthorized"));
+      res.status(401).json('Unauthorized');
    } else if (dbToken.expiration < Date.now()) {
-      res.status(401).json(new TweeterResponse(false, "Token expired"));
+      res.status(401).json('Token expired');
    } else if (dbToken.alias !== req.body.alias) {
-      res.status(401).json(new TweeterResponse(false, "Unauthorized"));
+      res.status(401).json('Unauthorized');
    } else {
       next();
    }
@@ -40,4 +42,4 @@ function isAlphabetical(str) {
    return /^[a-zA-Z]+$/.test(str);
 }
 
-export default router;
+module.exports = router;

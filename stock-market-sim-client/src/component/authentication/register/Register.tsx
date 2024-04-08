@@ -1,21 +1,20 @@
 import "./Register.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { ChangeEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import { AuthToken, User } from "stock-market-sim-shared";
 import useToastListener from "../../toaster/ToastListenerHook";
 import { AuthenticationFields, PageType } from "../AuthenticationFields";
 import useUserInfo from "../../userInfo/UserInfoHook";
-import { RegisterPresenter, RegisterView } from "../../../presenter/RegisterPresenter";
+import { RegisterPresenter } from "../../../presenter/RegisterPresenter";
+import { AuthenticationView } from "../../../presenter/AuthenticationPresenter";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [alias, setAlias] = useState("");
   const [password, setPassword] = useState("");
-  const [imageBytes, setImageBytes] = useState<Uint8Array>(new Uint8Array());
-  const [imageUrl, setImageUrl] = useState<string>("");
   const [rememberMe, setRememberMe] = useState(false);
 
   const rememberMeRef = useRef(rememberMe);
@@ -26,27 +25,20 @@ const Register = () => {
   const { displayErrorMessage } = useToastListener();
 
   const checkSubmitButtonStatus = (): boolean => {
-    return !firstName || !lastName || !alias || !password || !imageUrl;
+    return !firstName || !lastName || !alias || !password
   };
 
   const updateUserInfoWrapper = (user: User, authToken: AuthToken) => {
     updateUserInfo(user, authToken, rememberMeRef.current);
   }
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    presenter.handleImageFile(file);
-  };
-
   const doRegister = async () => {
-    presenter.doAuthentication(alias, password, undefined, firstName, lastName, imageBytes);
+    presenter.doAuthentication(alias, password, undefined, firstName, lastName);
   };
 
-  const listener: RegisterView = {
+  const listener: AuthenticationView = {
     updateUserInfo: updateUserInfoWrapper,
     navigate: navigate,
-    setImageUrl: setImageUrl,
-    setImageBytes: setImageBytes,
     displayErrorMessage: displayErrorMessage
   }
 
@@ -78,16 +70,6 @@ const Register = () => {
           <label htmlFor="lastNameInput">Last Name</label>
         </div>
         <AuthenticationFields setAlias={setAlias} setPassword={setPassword} pageType={PageType.Register} />
-        <div className="form-floating mb-3">
-          <input
-            type="file"
-            className="d-inline-block py-5 px-4 form-control bottom"
-            id="imageFileInput"
-            onChange={handleFileChange}
-          />
-          <label htmlFor="imageFileInput">User Image</label>
-          <img src={imageUrl} className="img-thumbnail" alt=""></img>
-        </div>
       </>
     );
   };
@@ -95,7 +77,7 @@ const Register = () => {
   const switchAuthenticationMethodGenerator = () => {
     return (
       <div className="mb-3">
-        Algready registered? <Link to="/login">Sign in</Link>
+        Already registered? <Link to="/login">Sign in</Link>
       </div>
     );
   };

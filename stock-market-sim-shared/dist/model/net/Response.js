@@ -1,6 +1,6 @@
 import { AuthToken } from "../domain/AuthToken";
 import { User } from "../domain/User";
-export class TweeterResponse {
+export class AppResponse {
     _success;
     _message;
     constructor(success, message = null) {
@@ -15,10 +15,10 @@ export class TweeterResponse {
     }
     static fromJson(json) {
         const jsonObject = json;
-        return new TweeterResponse(jsonObject._success, jsonObject._message);
+        return new AppResponse(jsonObject._success, jsonObject._message);
     }
 }
-export class AuthResponse extends TweeterResponse {
+export class AuthResponse extends AppResponse {
     _user;
     _token;
     constructor(success, user, token, message) {

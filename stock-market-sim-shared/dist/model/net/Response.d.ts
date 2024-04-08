@@ -1,14 +1,14 @@
 import { AuthToken } from "../domain/AuthToken";
 import { User } from "../domain/User";
-export declare class TweeterResponse {
+export declare class AppResponse {
     private _success;
     private _message;
     constructor(success: boolean, message?: string | null);
     get success(): boolean;
     get message(): string | null;
-    static fromJson(json: JSON): TweeterResponse;
+    static fromJson(json: JSON): AppResponse;
 }
-export declare class AuthResponse extends TweeterResponse {
+export declare class AuthResponse extends AppResponse {
     private _user;
     private _token;
     constructor(success: boolean, user: User, token: AuthToken, message: string | null);

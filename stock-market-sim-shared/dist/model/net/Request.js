@@ -1,7 +1,6 @@
 import { AuthToken } from "../domain/AuthToken";
 export class AppRequest {
 }
-// TODO: M4: Remove duplication - AuthToken Request that can be subclassed 
 export class LoginRequest extends AppRequest {
     _username;
     _password;
@@ -16,20 +15,48 @@ export class LoginRequest extends AppRequest {
     get password() {
         return this._password;
     }
+    toJSON() {
+        return {
+            username: this._username,
+            password: this._password
+        };
+    }
+}
+export class AuthTokenRequest extends AppRequest {
+    _authToken;
+    constructor(authToken) {
+        super();
+        this._authToken = authToken;
+    }
+    get authToken() {
+        return this._authToken;
+    }
+    static fromJson(json) {
+        const jsonObject = json;
+        const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._authToken));
+        if (deserializedToken === null) {
+            throw new Error("AuthTokenRequest, could not deserialize token with json:\n" +
+                JSON.stringify(jsonObject._authToken));
+        }
+        return new AuthTokenRequest(deserializedToken);
+    }
+    toJSON() {
+        return {
+            authToken: this._authToken
+        };
+    }
 }
 export class RegisterRequest extends AppRequest {
     _firstName;
     _lastName;
     _alias;
     _password;
-    _imageStringBase64;
-    constructor(firstName, lastName, alias, password, imageBytes) {
+    constructor(firstName, lastName, alias, password) {
         super();
         this._firstName = firstName;
         this._lastName = lastName;
         this._alias = alias;
         this._password = password;
-        this._imageStringBase64 = imageBytes;
     }
     get firstName() {
         return this._firstName;
@@ -43,26 +70,12 @@ export class RegisterRequest extends AppRequest {
     get password() {
         return this._password;
     }
-    get imageStringBase64() {
-        return this._imageStringBase64;
-    }
-}
-export class LogOutRequest extends AppRequest {
-    _authToken;
-    constructor(authToken) {
-        super();
-        this._authToken = authToken;
-    }
-    get authToken() {
-        return this._authToken;
-    }
-    static fromJson(json) {
-        const jsonObject = json;
-        const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._authToken));
-        if (deserializedToken === null) {
-            throw new Error("LogOutRequest, could not deserialize token with json:\n" +
-                JSON.stringify(jsonObject._authToken));
-        }
-        return new LogOutRequest(deserializedToken);
+    toJSON() {
+        return {
+            firstName: this._firstName,
+            lastName: this._lastName,
+            alias: this._alias,
+            password: this._password
+        };
     }
 }

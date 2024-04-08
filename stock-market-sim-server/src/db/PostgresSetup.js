@@ -1,4 +1,4 @@
-import { Client, } from "pg"
+const { Client } = require('pg');
 
 const client = new Client({
    connectionString: process.env.DATABASE_URL,
@@ -10,7 +10,7 @@ const client = new Client({
 client.connect();
 
 function createTables() {
-   client.query(`CREATE TABLE IF NOT EXISTS user (
+   client.query(`CREATE TABLE IF NOT EXISTS app_user (
       id SERIAL PRIMARY KEY,
       username TEXT NOT NULL,
       password TEXT NOT NULL,
@@ -18,22 +18,22 @@ function createTables() {
 
    client.query(`CREATE TABLE IF NOT EXISTS auth_token (
       id SERIAL PRIMARY KEY,
-      user_id INT REFERENCES user(id),
+      user_id INT REFERENCES app_user(id),
       token TEXT UNIQUE NOT NULL,
       expiration INT NOT NULL
    )`);
 
    client.query(`CREATE TABLE IF NOT EXISTS holding (
       id SERIAL PRIMARY KEY,
-      user_id INT REFERENCES user(id),
+      user_id INT REFERENCES app_user(id),
       symbol TEXT NOT NULL,
       quantity INT NOT NULL,
       purchase_price DECIMAL NOT NULL
    )`);
 
-   client.query(`CREATE TABLE IF NOT EXISTS transaction (
+   client.query(`CREATE TABLE IF NOT EXISTS app_transaction (
       id SERIAL PRIMARY KEY,
-      user_id INT REFERENCES user(id),
+      user_id INT REFERENCES app_user(id),
       symbol TEXT NOT NULL,
       quantity INT NOT NULL,
       price DECIMAL NOT NULL,
@@ -41,6 +41,4 @@ function createTables() {
    )`);
 }
 
-createTables();
-
-export default client;
+module.exports = client;

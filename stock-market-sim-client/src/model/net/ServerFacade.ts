@@ -1,28 +1,29 @@
-import { AuthResponse, RegisterRequest, LoginRequest, LogOutRequest } from "stock-market-sim-shared";
+import { AuthResponse, RegisterRequest, LoginRequest } from "stock-market-sim-shared";
 import { ClientCommunicator } from "./ClientCommunicator";
+import { AuthTokenRequest } from "stock-market-sim-shared/dist/model/net/Request";
 
 export class ServerFacade {
 
-   private SERVER_URL = "http://localhost:"; // TODO: Set this value.
+   private SERVER_URL = "https://stock-market-sim-bef54ae5d38a.herokuapp.com";
 
    private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
 
    async login(request: LoginRequest): Promise<AuthResponse> {
-      const endpoint = "/login";
+      const endpoint = "/auth/login";
       const response: JSON = await this.clientCommunicator.doPost<LoginRequest>(request, endpoint);
 
       return AuthResponse.fromJson(response);
    }
 
    async register(request: RegisterRequest): Promise<AuthResponse> {
-      const endpoint = "/register";
+      const endpoint = "/auth/register";
       const response: JSON = await this.clientCommunicator.doPost<RegisterRequest>(request, endpoint);
 
       return AuthResponse.fromJson(response);
    }
 
-   async logout(request: LogOutRequest): Promise<void> {
-      const endpoint = "/logout";
-      await this.clientCommunicator.doPost<LogOutRequest>(request, endpoint);
+   async logout(request: AuthTokenRequest): Promise<void> {
+      const endpoint = "/auth/logout";
+      await this.clientCommunicator.doPost<AuthTokenRequest>(request, endpoint);
    }
 }

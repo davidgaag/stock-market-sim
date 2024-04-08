@@ -1,7 +1,7 @@
 import { AuthToken } from "../domain/AuthToken";
 import { User } from "../domain/User";
 
-export class TweeterResponse {
+export class AppResponse {
    private _success: boolean;
    private _message: string | null;
 
@@ -18,7 +18,7 @@ export class TweeterResponse {
       return this._message;
    }
 
-   static fromJson(json: JSON): TweeterResponse {
+   static fromJson(json: JSON): AppResponse {
       interface ResponseJson {
          _success: boolean;
          _message: string;
@@ -26,7 +26,7 @@ export class TweeterResponse {
 
       const jsonObject: ResponseJson = json as unknown as ResponseJson;
 
-      return new TweeterResponse(
+      return new AppResponse(
          jsonObject._success,
          jsonObject._message
       );
@@ -38,7 +38,7 @@ interface ResponseJson {
    _message: string;
 }
 
-export class AuthResponse extends TweeterResponse {
+export class AuthResponse extends AppResponse {
    private _user: User;
    private _token: AuthToken;
 

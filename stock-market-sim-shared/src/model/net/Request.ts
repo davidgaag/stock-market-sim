@@ -1,5 +1,4 @@
 import { AuthToken } from "../domain/AuthToken";
-import { User } from "../domain/User";
 
 export class AppRequest { }
 
@@ -19,6 +18,13 @@ export class LoginRequest extends AppRequest {
 
    get password() {
       return this._password;
+   }
+
+   toJSON() {
+      return {
+         username: this._username,
+         password: this._password
+      }
    }
 }
 
@@ -51,6 +57,11 @@ export class AuthTokenRequest extends AppRequest {
       return new AuthTokenRequest(deserializedToken);
    }
 
+   toJSON() {
+      return {
+         authToken: this._authToken
+      }
+   }
 }
 
 export class RegisterRequest extends AppRequest {
@@ -58,15 +69,13 @@ export class RegisterRequest extends AppRequest {
    private _lastName: string;
    private _alias: string;
    private _password: string;
-   private _imageStringBase64: string;
 
-   constructor(firstName: string, lastName: string, alias: string, password: string, imageBytes: string) {
+   constructor(firstName: string, lastName: string, alias: string, password: string) {
       super();
       this._firstName = firstName;
       this._lastName = lastName;
       this._alias = alias;
       this._password = password;
-      this._imageStringBase64 = imageBytes;
    }
 
    get firstName() {
@@ -85,40 +94,12 @@ export class RegisterRequest extends AppRequest {
       return this._password;
    }
 
-   get imageStringBase64() {
-      return this._imageStringBase64;
-   }
-}
-
-export class LogOutRequest extends AppRequest {
-   private _authToken: AuthToken;
-
-   constructor(authToken: AuthToken) {
-      super();
-      this._authToken = authToken;
-   }
-
-   get authToken() {
-      return this._authToken;
-   }
-
-   static fromJson(json: JSON): LogOutRequest {
-      interface LogOutRequestJson {
-         _authToken: AuthToken;
+   toJSON() {
+      return {
+         firstName: this._firstName,
+         lastName: this._lastName,
+         alias: this._alias,
+         password: this._password
       }
-
-      const jsonObject: LogOutRequestJson = json as unknown as LogOutRequestJson;
-      const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._authToken));
-
-      if (deserializedToken === null) {
-         throw new Error(
-            "LogOutRequest, could not deserialize token with json:\n" +
-            JSON.stringify(jsonObject._authToken)
-         );
-      }
-
-      return new LogOutRequest(
-         deserializedToken
-      );
    }
 }

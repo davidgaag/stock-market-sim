@@ -11,7 +11,7 @@ export class ClientCommunicator {
       const request = {
          method: "post",
          headers: new Headers({
-            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "Content-type": "application/json",
          }),
          body: JSON.stringify(req),
       };
