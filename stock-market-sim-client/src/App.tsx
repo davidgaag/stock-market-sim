@@ -4,6 +4,8 @@ import Login from "./component/authentication/login/Login";
 import Register from "./component/authentication/register/Register";
 import Toaster from "./component/toaster/Toaster";
 import useUserInfo from "./component/userInfo/UserInfoHook";
+import Portfolio from "./component/simulator/Portfolio";
+import AppNavbar from "./component/appNavbar/AppNavbar";
 
 
 const App = () => {
@@ -29,10 +31,16 @@ const App = () => {
 
 const AuthenticatedRoutes = () => {
   return (
-    <Routes>
-      <Route path="logout" element={<Navigate to="/login" />} />
-      <Route path="*" element={<Navigate to="/feed" />} />
-    </Routes >
+    <>
+      <AppNavbar />
+      <Routes>
+        <Route path="portfolio" element={<Portfolio />} />
+        <Route path="trade" element={<Trade />} />
+        <Route path="quote" element={<Quote />} />
+        <Route path="logout" element={<Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to="/portfolio" />} />
+      </Routes >
+    </>
   );
 };
 

@@ -8,6 +8,8 @@ import bcrypt from 'bcryptjs';
 
 const router = Router();
 
+// TODO: test edge cases (e.g. already existing user)
+
 const invalidRequest = new AppResponse(false, 'Invalid request');
 const usernameExists = new AppResponse(false, 'Username already exists');
 const loginFailed = new AppResponse(false, 'Username or password is incorrect');

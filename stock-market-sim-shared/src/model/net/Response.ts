@@ -1,5 +1,6 @@
 import { AuthToken } from "../domain/AuthToken.js";
 import { User } from "../domain/User.js";
+import { Holding } from "../domain/Holding.js";
 
 export class AppResponse {
    private _success: boolean;
@@ -90,5 +91,37 @@ export class AuthResponse extends AppResponse {
          deserializedToken,
          jsonObject._message
       );
+   }
+}
+
+export class PortfolioResponse extends AppResponse {
+   private _holdings: Holding[];
+
+   constructor(
+      success: boolean,
+      holdings: Holding[],
+      message: string | null
+   ) {
+      super(success, message);
+      this._holdings = holdings;
+   }
+
+   get holdings() {
+      return this._holdings;
+   }
+
+   static fromJson(json: JSON): PortfolioResponse {
+      interface PortfolioResponseJson extends ResponseJson {
+         _holdings: JSON[];
+      }
+
+      const jsonObject: PortfolioResponseJson =
+         json as unknown as PortfolioResponseJson;
+
+      const holdings: Holding[] = jsonObject._holdings.map((holdingJson) => {
+         return Holding.fromJson(JSON.stringify(holdingJson));
+      });
+
+      return new PortfolioResponse(jsonObject._success, holdings, jsonObject._message);
    }
 }

@@ -11,7 +11,7 @@ enum PageType {
    Register = "register",
 }
 
-const AuthenticationFields = (props: Props) => { // TODO: Use object destructuring instead of props? Same question/TODO applies for all other similar cases
+const AuthenticationFields = (props: Props) => {
    return (
       <>
          <div className="form-floating">

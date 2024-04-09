@@ -1,5 +1,6 @@
 import { AuthToken } from "../domain/AuthToken.js";
 import { User } from "../domain/User.js";
+import { Holding } from "../domain/Holding.js";
 export declare class AppResponse {
     private _success;
     private _message;
@@ -15,4 +16,10 @@ export declare class AuthResponse extends AppResponse {
     get user(): User;
     get token(): AuthToken;
     static fromJson(json: JSON): AuthResponse;
+}
+export declare class PortfolioResponse extends AppResponse {
+    private _holdings;
+    constructor(success: boolean, holdings: Holding[], message: string | null);
+    get holdings(): Holding[];
+    static fromJson(json: JSON): PortfolioResponse;
 }

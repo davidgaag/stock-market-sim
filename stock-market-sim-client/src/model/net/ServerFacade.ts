@@ -1,6 +1,6 @@
-import { AuthResponse, RegisterRequest, LoginRequest } from "stock-market-sim-shared";
+import { AuthResponse, RegisterRequest, LoginRequest, PortfolioResponse } from "stock-market-sim-shared";
 import { ClientCommunicator } from "./ClientCommunicator";
-import { AuthTokenRequest } from "stock-market-sim-shared/dist/model/net/Request";
+import { AuthTokenRequest } from "stock-market-sim-shared";
 
 export class ServerFacade {
 
@@ -25,5 +25,12 @@ export class ServerFacade {
    async logout(request: AuthTokenRequest): Promise<void> {
       const endpoint = "/auth/logout";
       await this.clientCommunicator.doPost<AuthTokenRequest>(request, endpoint);
+   }
+
+   async getHoldings(request: AuthTokenRequest): Promise<PortfolioResponse> {
+      const endpoint = "/api/portfolio";
+      const response: JSON = await this.clientCommunicator.doPost<AuthTokenRequest>(request, endpoint);
+
+      return PortfolioResponse.fromJson(response);
    }
 }

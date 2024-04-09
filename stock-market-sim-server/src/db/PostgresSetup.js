@@ -44,6 +44,12 @@ function createTables() {
       price DECIMAL NOT NULL,
       created_at DATE NOT NULL
    )`);
+
+   client.query(`CREATE TABLE IF NOT EXISTS asset (
+      id SERIAL PRIMARY KEY,
+      symbol TEXT UNIQUE NOT NULL,
+      name TEXT NOT NULL,
+   )`);
 }
 
 createTables();
