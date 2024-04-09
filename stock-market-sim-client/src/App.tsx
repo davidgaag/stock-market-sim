@@ -36,7 +36,7 @@ const AuthenticatedRoutes = () => {
       <AppNavbar />
       <Routes>
         <Route path="portfolio" element={<Portfolio />} />
-        <Route path="trade" element={<Trade />} />
+        {/* <Route path="trade" element={<Trade />} /> */}
         <Route path="quote" element={<QuotePage />} />
         <Route path="logout" element={<Navigate to="/login" />} />
         <Route path="*" element={<Navigate to="/portfolio" />} />
