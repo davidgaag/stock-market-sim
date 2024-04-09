@@ -4,15 +4,12 @@ import { putAuthToken, deleteAuthToken } from '../db/AuthTokenDao.js';
 import { User } from '../../shared/model/domain/User.js';
 import { AuthToken } from '../../shared/model/domain/AuthToken.js';
 import { AuthResponse, AppResponse } from '../../shared/model/net/Response.js';
+import { invalidRequest, usernameExists, loginFailed } from '../app.js';
 import bcrypt from 'bcryptjs';
 
 const router = Router();
 
 // TODO: test edge cases (e.g. already existing user)
-
-const invalidRequest = new AppResponse(false, 'Invalid request');
-const usernameExists = new AppResponse(false, 'Username already exists');
-const loginFailed = new AppResponse(false, 'Username or password is incorrect');
 
 router.post('/login', async (req, res) => {
    if (!req.body.username || !req.body.password) {

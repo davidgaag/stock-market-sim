@@ -9,6 +9,11 @@ const port = process.env.PORT || 80;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+export const invalidRequest = new AppResponse(false, 'Invalid request');
+export const usernameExists = new AppResponse(false, 'Username already exists');
+export const loginFailed = new AppResponse(false, 'Username or password is incorrect');
+export const serverError = new AppResponse(false, 'Internal server error');
+
 app.use(express.json());
 
 app.use((req, res, next) => {

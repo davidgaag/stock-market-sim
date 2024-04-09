@@ -8,4 +8,9 @@ export class SimulatorService {
       const response = await this.serverFacade.getHoldings(new AuthTokenRequest(authToken));
       return response.holdings;
    }
+
+   public async getQuote(authToken: AuthToken, symbol: string) {
+      const response = await this.serverFacade.getQuote(new AuthTokenRequest(authToken), symbol);
+      return response.quote;
+   }
 }

@@ -1,15 +1,17 @@
 import { Router } from 'express';
 import { getQuote } from '../net/finnhub.js';
 import { getAuthToken } from '../db/AuthTokenDao.js';
+import { invalidRequest, serverError } from '../app.js';
+import { Quote } from '../../shared/model/domain/Quote.js';
+import { QuoteResponse } from '../../shared/model/response/QuoteResponse.js';
 
 const router = Router();
 
-// TODO: Fix, use right requests, etc.
-
+// Middleware to check auth token validity
 router.use((req, res, next) => {
    console.log("API request: " + req.url + " " + JSON.stringify(req.body));
 
-   if (!req.body.authToken || !req.body.alias) {
+   if (!req.body.authToken) {
       res.status(401).json('Unauthorized');
       return;
    }
@@ -20,23 +22,36 @@ router.use((req, res, next) => {
       res.status(401).json('Unauthorized');
    } else if (dbToken.expiration < Date.now()) {
       res.status(401).json('Token expired');
-   } else if (dbToken.alias !== req.body.alias) {
-      res.status(401).json('Unauthorized');
    } else {
       next();
    }
 });
 
+router.get('/portfolio', (req, res) => {
+   // TODO: Implement this
+   res.status(501).send('Not implemented');
+});
+
 router.get('/quote/:symbol', (req, res) => {
    const symbol = req.params.symbol;
    if (isAlphabetical(symbol)) {
-      getQuote(symbol).then((quote) => {
-         res.send(quote);
+      getQuote(symbol).then((quoteData) => {
+         const quote = new Quote(
+            quoteData.c,
+            quoteData.d,
+            quoteData.dp,
+            quoteData.h,
+            quoteData.l,
+            quoteData.o,
+            quoteData.pc
+         );
+         res.status(200).json(new QuoteResponse(quote));
+         return;
       }).catch((err) => {
-         res.status(500).send
+         res.status(500).json(serverError);
       });
    } else {
-      res.status(400).send('Invalid symbol');
+      res.status(400).json(invalidRequest);
    }
 });
 

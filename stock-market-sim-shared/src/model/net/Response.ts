@@ -1,6 +1,7 @@
 import { AuthToken } from "../domain/AuthToken.js";
 import { User } from "../domain/User.js";
 import { Holding } from "../domain/Holding.js";
+import { Quote } from "../domain/Quote.js";
 
 export class AppResponse {
    private _success: boolean;
@@ -123,5 +124,31 @@ export class PortfolioResponse extends AppResponse {
       });
 
       return new PortfolioResponse(jsonObject._success, holdings, jsonObject._message);
+   }
+}
+
+export class QuoteResponse extends AppResponse {
+   private _quote: Quote;
+
+   constructor(success: boolean, quote: Quote, message: string | null) {
+      super(success, message);
+      this._quote = quote;
+   }
+
+   get quote() {
+      return this._quote;
+   }
+
+   static fromJson(json: JSON): QuoteResponse {
+      interface QuoteResponseJson extends ResponseJson {
+         _quote: JSON;
+      }
+
+      const jsonObject: QuoteResponseJson =
+         json as unknown as QuoteResponseJson;
+
+      const quote = Quote.fromJson(JSON.stringify(jsonObject._quote));
+
+      return new QuoteResponse(jsonObject._success, quote, jsonObject._message);
    }
 }

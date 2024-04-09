@@ -1,6 +1,7 @@
 import { AuthToken } from "../domain/AuthToken.js";
 import { User } from "../domain/User.js";
 import { Holding } from "../domain/Holding.js";
+import { Quote } from "../domain/Quote.js";
 export class AppResponse {
     _success;
     _message;
@@ -63,5 +64,20 @@ export class PortfolioResponse extends AppResponse {
             return Holding.fromJson(JSON.stringify(holdingJson));
         });
         return new PortfolioResponse(jsonObject._success, holdings, jsonObject._message);
+    }
+}
+export class QuoteResponse extends AppResponse {
+    _quote;
+    constructor(success, quote, message) {
+        super(success, message);
+        this._quote = quote;
+    }
+    get quote() {
+        return this._quote;
+    }
+    static fromJson(json) {
+        const jsonObject = json;
+        const quote = Quote.fromJson(JSON.stringify(jsonObject._quote));
+        return new QuoteResponse(jsonObject._success, quote, jsonObject._message);
     }
 }

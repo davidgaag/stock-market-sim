@@ -6,6 +6,7 @@ import Toaster from "./component/toaster/Toaster";
 import useUserInfo from "./component/userInfo/UserInfoHook";
 import Portfolio from "./component/simulator/Portfolio";
 import AppNavbar from "./component/appNavbar/AppNavbar";
+import QuotePage from "./component/simulator/QuotePage";
 
 
 const App = () => {
@@ -36,7 +37,7 @@ const AuthenticatedRoutes = () => {
       <Routes>
         <Route path="portfolio" element={<Portfolio />} />
         <Route path="trade" element={<Trade />} />
-        <Route path="quote" element={<Quote />} />
+        <Route path="quote" element={<QuotePage />} />
         <Route path="logout" element={<Navigate to="/login" />} />
         <Route path="*" element={<Navigate to="/portfolio" />} />
       </Routes >
