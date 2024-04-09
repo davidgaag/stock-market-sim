@@ -37,6 +37,7 @@ export class ServerFacade {
    async getQuote(request: AuthTokenRequest, symbol: string): Promise<QuoteResponse> {
       const endpoint = `/api/quote/${symbol}`;
       const response: JSON = await this.clientCommunicator.doPost<AuthTokenRequest>(request, endpoint);
+
       return QuoteResponse.fromJson(response);
    }
 }

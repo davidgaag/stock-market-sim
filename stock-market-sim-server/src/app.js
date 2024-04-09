@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import apiRoutes from './routes/api.js';
 import authRoutes from './routes/auth.js';
+import { AppResponse } from '../shared/model/net/Response.js';
 
 const app = express();
 const port = process.env.PORT || 80;

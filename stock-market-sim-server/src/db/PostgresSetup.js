@@ -48,7 +48,7 @@ function createTables() {
    client.query(`CREATE TABLE IF NOT EXISTS asset (
       id SERIAL PRIMARY KEY,
       symbol TEXT UNIQUE NOT NULL,
-      name TEXT NOT NULL,
+      name TEXT NOT NULL
    )`);
 }
 

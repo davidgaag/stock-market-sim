@@ -58,7 +58,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/logout', async (req, res) => {
-   if (!req.body.token) {
+   if (!req.body.authToken) {
       res.status(400).json(invalidRequest);
       return;
    }

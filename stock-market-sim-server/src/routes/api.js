@@ -3,7 +3,7 @@ import { getQuote } from '../net/finnhub.js';
 import { getAuthToken } from '../db/AuthTokenDao.js';
 import { invalidRequest, serverError } from '../app.js';
 import { Quote } from '../../shared/model/domain/Quote.js';
-import { QuoteResponse } from '../../shared/model/response/QuoteResponse.js';
+import { QuoteResponse } from '../../shared/model/net/Response.js';
 
 const router = Router();
 
@@ -27,16 +27,22 @@ router.use((req, res, next) => {
    }
 });
 
-router.get('/portfolio', (req, res) => {
+router.post('/portfolio', (req, res) => {
    // TODO: Implement this
    res.status(501).send('Not implemented');
 });
 
-router.get('/quote/:symbol', (req, res) => {
+router.post('/quote/:symbol', (req, res) => {
    const symbol = req.params.symbol;
    if (isAlphabetical(symbol)) {
-      getQuote(symbol).then((quoteData) => {
+      getQuote(symbol, (error, quoteData) => {
+         if (error) {
+            res.status(500).json(serverError);
+            return;
+         }
+
          const quote = new Quote(
+            symbol,
             quoteData.c,
             quoteData.d,
             quoteData.dp,
@@ -45,10 +51,7 @@ router.get('/quote/:symbol', (req, res) => {
             quoteData.o,
             quoteData.pc
          );
-         res.status(200).json(new QuoteResponse(quote));
-         return;
-      }).catch((err) => {
-         res.status(500).json(serverError);
+         res.status(200).json(new QuoteResponse(true, quote, 'Success'));
       });
    } else {
       res.status(400).json(invalidRequest);
