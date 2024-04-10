@@ -7,6 +7,7 @@ import useUserInfo from "./component/userInfo/UserInfoHook";
 import Portfolio from "./component/simulator/Portfolio";
 import AppNavbar from "./component/appNavbar/AppNavbar";
 import QuotePage from "./component/simulator/QuotePage";
+import Trade from "./component/simulator/Trade";
 
 
 const App = () => {
@@ -36,7 +37,7 @@ const AuthenticatedRoutes = () => {
       <AppNavbar />
       <Routes>
         <Route path="portfolio" element={<Portfolio />} />
-        {/* <Route path="trade" element={<Trade />} /> */}
+        <Route path="trade" element={<Trade />} />
         <Route path="quote" element={<QuotePage />} />
         <Route path="logout" element={<Navigate to="/login" />} />
         <Route path="*" element={<Navigate to="/portfolio" />} />

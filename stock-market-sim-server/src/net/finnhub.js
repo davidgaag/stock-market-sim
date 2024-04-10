@@ -11,7 +11,6 @@ function getQuote(symbol, callback) {
          console.error(error);
          callback(error);
       } else {
-         console.log("Data: ", data);
          callback(null, data);
       }
    });

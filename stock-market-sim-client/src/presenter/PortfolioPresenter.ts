@@ -18,18 +18,25 @@ export class PortfolioPresenter extends Presenter<PortfolioView> {
    }
 
    public async getPortfolio(authToken: AuthToken) {
-      const holdings = await this.service.getHoldings(authToken);
+      let holdings = await this.service.getHoldings(authToken);
 
       let marketValue = 0;
       let dayChange = 0;
       let cashValue = 0;
-      for (const holding of holdings) {
+      let indexOfCash = -1;
+      for (let i = 0; i < holdings.length; i++) {
+         const holding = holdings[i];
          if (holding.symbol === "$CASH$") {
             cashValue = holding.value;
+            indexOfCash = i;
          } else {
             marketValue += holding.value;
             dayChange += holding.dayChange;
          }
+      }
+
+      if (indexOfCash !== -1) {
+         holdings = holdings.slice(0, indexOfCash).concat(holdings.slice(indexOfCash + 1));
       }
 
       this.view.setHoldings(holdings);

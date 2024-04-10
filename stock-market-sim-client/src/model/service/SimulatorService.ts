@@ -1,4 +1,4 @@
-import { AuthToken, AuthTokenRequest } from "stock-market-sim-shared";
+import { AuthToken, AuthTokenRequest, TradeRequest } from "stock-market-sim-shared";
 import { ServerFacade } from "../net/ServerFacade";
 
 export class SimulatorService {
@@ -12,5 +12,10 @@ export class SimulatorService {
    public async getQuote(authToken: AuthToken, symbol: string) {
       const response = await this.serverFacade.getQuote(new AuthTokenRequest(authToken), symbol);
       return response.quote;
+   }
+
+   public async trade(authToken: AuthToken, type: string, symbol: string, shares: number) {
+      const response = await this.serverFacade.trade(new TradeRequest(authToken, type, symbol, shares));
+      return response.message!;
    }
 }

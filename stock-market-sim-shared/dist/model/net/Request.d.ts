@@ -38,3 +38,18 @@ export declare class RegisterRequest extends AppRequest {
         password: string;
     };
 }
+export declare class TradeRequest extends AuthTokenRequest {
+    private _type;
+    private _symbol;
+    private _shares;
+    constructor(authToken: AuthToken, type: string, symbol: string, shares: number);
+    get type(): string;
+    get symbol(): string;
+    get shares(): number;
+    toJSON(): {
+        authToken: AuthToken;
+        type: string;
+        symbol: string;
+        shares: number;
+    };
+}

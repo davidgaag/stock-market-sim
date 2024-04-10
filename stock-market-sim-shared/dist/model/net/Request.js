@@ -79,3 +79,31 @@ export class RegisterRequest extends AppRequest {
         };
     }
 }
+export class TradeRequest extends AuthTokenRequest {
+    _type;
+    _symbol;
+    _shares;
+    constructor(authToken, type, symbol, shares) {
+        super(authToken);
+        this._type = type;
+        this._symbol = symbol;
+        this._shares = shares;
+    }
+    get type() {
+        return this._type;
+    }
+    get symbol() {
+        return this._symbol;
+    }
+    get shares() {
+        return this._shares;
+    }
+    toJSON() {
+        return {
+            authToken: this.authToken,
+            type: this._type,
+            symbol: this._symbol,
+            shares: this._shares
+        };
+    }
+}

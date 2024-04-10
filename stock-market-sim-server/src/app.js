@@ -14,6 +14,7 @@ export const invalidRequest = new AppResponse(false, 'Invalid request');
 export const usernameExists = new AppResponse(false, 'Username already exists');
 export const loginFailed = new AppResponse(false, 'Username or password is incorrect');
 export const serverError = new AppResponse(false, 'Internal server error');
+export const unauthorized = new AppResponse(false, 'Unauthorized');
 
 app.use(express.json());
 

@@ -1,4 +1,4 @@
-import { AuthResponse, RegisterRequest, LoginRequest, PortfolioResponse, QuoteResponse } from "stock-market-sim-shared";
+import { AuthResponse, RegisterRequest, LoginRequest, PortfolioResponse, QuoteResponse, AppResponse, TradeRequest } from "stock-market-sim-shared";
 import { ClientCommunicator } from "./ClientCommunicator";
 import { AuthTokenRequest } from "stock-market-sim-shared";
 
@@ -39,5 +39,12 @@ export class ServerFacade {
       const response: JSON = await this.clientCommunicator.doPost<AuthTokenRequest>(request, endpoint);
 
       return QuoteResponse.fromJson(response);
+   }
+
+   async trade(request: TradeRequest): Promise<AppResponse> {
+      const endpoint = "/api/trade";
+      const response: JSON = await this.clientCommunicator.doPost<TradeRequest>(request, endpoint);
+
+      return AppResponse.fromJson(response);
    }
 }

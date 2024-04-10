@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getUser, putUser } from '../db/UserDao.js';
-import { putAuthToken, deleteAuthToken } from '../db/AuthTokenDao.js';
+import { getUser, putUser } from '../db/postgres/UserDao.js';
+import { putAuthToken, deleteAuthToken } from '../db/redis/Redis.js';
 import { User } from '../../shared/model/domain/User.js';
 import { AuthToken } from '../../shared/model/domain/AuthToken.js';
 import { AuthResponse, AppResponse } from '../../shared/model/net/Response.js';
@@ -27,10 +27,10 @@ router.post('/login', async (req, res) => {
    }
 
    if (await comparePasswords(password, userRow.password)) {
-      const user = generateUser(username);
+      const user = generateFakeUser(username);
       const token = AuthToken.Generate();
-      await putAuthToken(userRow.id, token.token, token.timestamp + 1000 * 60 * 60 * 24);
-      res.status(200).json(new AuthResponse(true, user, token, 'Login successful'));
+      await putAuthToken(token.token, userRow.id);
+      res.status(200).json(generateAuthResponse(user, token));
    } else {
       res.status(400).json(loginFailed);
    }
@@ -51,9 +51,9 @@ router.post('/register', async (req, res) => {
    }
 
    const userRow = await putUser(username, await hashPassword(password));
-   const user = generateUser(username);
+   const user = generateFakeUser(username);
    const token = AuthToken.Generate();
-   await putAuthToken(userRow.id, token.token, token.timestamp + 1000 * 60 * 60 * 24);
+   await putAuthToken(token.token, userRow.id);
    res.status(201).json(generateAuthResponse(user, token));
 });
 
@@ -81,12 +81,12 @@ async function comparePasswords(password, hashedPassword) {
    return await bcrypt.compare(password, hashedPassword);
 }
 
-function generateUser(username) {
+function generateFakeUser(username) {
    return new User('First', 'Last', username, 'https://www.gravatar.com/avatar/');
 }
 
 function generateAuthResponse(user, token) {
-   return new AuthResponse(true, user, token, 'Login successful');
+   return new AuthResponse(true, user, token, 'Auth successful');
 }
 
 export default router;

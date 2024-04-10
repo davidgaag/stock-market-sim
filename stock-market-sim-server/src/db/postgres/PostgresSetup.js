@@ -21,13 +21,6 @@ function createTables() {
       password TEXT NOT NULL
    )`);
 
-   client.query(`CREATE TABLE IF NOT EXISTS auth_token (
-      id SERIAL PRIMARY KEY,
-      user_id INT REFERENCES app_user(id),
-      token TEXT UNIQUE NOT NULL,
-      expiration BIGINT NOT NULL
-   )`);
-
    client.query(`CREATE TABLE IF NOT EXISTS holding (
       id SERIAL PRIMARY KEY,
       user_id INT REFERENCES app_user(id),
