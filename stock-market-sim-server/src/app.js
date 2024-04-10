@@ -18,19 +18,15 @@ export const unauthorized = new AppResponse(false, 'Unauthorized');
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-   console.log(`${req.method} request for ${req.url}: ${JSON.stringify(req.body)}`);
-   next();
-});
+// Debugging middleware
+// app.use((req, res, next) => {
+//    console.log(`${req.method} request for ${req.url}: ${JSON.stringify(req.body)}`);
+//    next();
+// });
 
 app.use('/auth', authRoutes);
 
 app.use('/api', apiRoutes);
-
-app.use((req, res, next) => {
-   console.log('Made it past API routes');
-   next();
-});
 
 app.use(express.static(path.join(__dirname, '../public')));
 

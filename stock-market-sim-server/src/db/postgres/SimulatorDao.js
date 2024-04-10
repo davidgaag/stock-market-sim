@@ -14,7 +14,6 @@ async function putHolding(user_id, symbol, quantity, purchase_price) {
 }
 
 async function updateHolding(user_id, symbol, quantity, purchase_price) {
-   console.log('updateHolding: ', user_id, symbol, quantity, purchase_price);
    const res = await client.query(`
       UPDATE holding SET quantity = $1, purchase_price = $2 
       WHERE user_id = $3 AND symbol = $4 RETURNING *`,
@@ -82,13 +81,6 @@ async function sellTransaction(user_id, symbol, shares) {
       let newNumShares = currHolding.quantity - shares;
       let newStockPrice = currHolding.purchase_price;
 
-      console.log('cashBalance: ', cashBalance, typeof cashBalance,
-         'currHolding: ', currHolding,
-         'stockPrice: ', stockPrice, typeof stockPrice,
-         'totalValue: ', totalValue, typeof totalValue,
-         'newNumShares: ', newNumShares, typeof newNumShares,
-         'newStockPrice: ', newStockPrice, typeof newStockPrice,
-         'cashBalance + totalValue: ', cashBalance + totalValue);
       await updateHolding(user_id, '$CASH$', 0, cashBalance + totalValue);
       if (newNumShares === 0) {
          await client.query('DELETE FROM holding WHERE user_id = $1 AND symbol = $2', [user_id, symbol]);
@@ -111,12 +103,10 @@ async function getHoldings(user_id) {
 }
 
 async function getHolding(user_id, symbol) {
-   console.log('getHolding: ', user_id, symbol);
    const res = await client.query(`
       SELECT * FROM holding WHERE user_id = $1 AND symbol = $2`,
       [user_id, symbol]
    );
-   console.log('getHolding res: ', res, 'res.rows[0]: ', res.rows[0])
    return res.rows[0];
 }
 

@@ -39,8 +39,6 @@ export class PortfolioPresenter extends Presenter<PortfolioView> {
          holdings = holdings.slice(0, indexOfCash).concat(holdings.slice(indexOfCash + 1));
       }
 
-      console.log('marketVal: ', marketValue, typeof marketValue, 'cashVal: ', cashValue, typeof cashValue, 'dayChange: ', dayChange, typeof dayChange);
-
       this.view.setHoldings(holdings);
       this.view.setCurrValue(marketValue + Number(cashValue));
       this.view.setMarketValue(marketValue);

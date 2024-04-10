@@ -11,8 +11,6 @@ const router = Router();
 
 // Middleware to check auth token validity
 router.use(async (req, res, next) => {
-   console.log("API request: " + req.url + " " + JSON.stringify(req.body));
-
    if (!req.body.authToken) {
       res.status(401).json(unauthorized);
       return;
@@ -49,7 +47,6 @@ router.post('/portfolio', async (req, res) => {
       return new Holding(row.symbol, row.quantity, quote, row.purchase_price);
    }));
 
-   console.log("Holdings: ", JSON.stringify(holdings));
    res.status(200).json(new PortfolioResponse(true, holdings, 'Success'));
 });
 
@@ -72,7 +69,6 @@ router.post('/trade', async (req, res) => {
    const type = req.body.type;
    const symbol = req.body.symbol;
    const shares = parseInt(req.body.shares);
-   console.log("req.userId: ", req.userId);
    try {
       if (type === 'buy') {
          await buyTransaction(req.userId, symbol, shares);
@@ -99,12 +95,10 @@ router.post('/quote/:symbol', async (req, res) => {
    if (isValidTicker(symbol)) {
       try {
          let quoteData = await getDynamicAssetData(symbol);
-         console.log("Quote data redis: ", JSON.stringify(quoteData));
 
          if (Object.keys(quoteData).length === 0) {
             const data = await getQuote(symbol);
             quoteData = normalizeQuoteData(data);
-            console.log("Quote data API: ", JSON.stringify(quoteData));
             putDynamicAssetData(symbol, quoteData);
          }
 
@@ -118,7 +112,6 @@ router.post('/quote/:symbol', async (req, res) => {
             quoteData.openPrice,
             quoteData.previousClose
          );
-         console.log("Quote response: ", JSON.stringify(quote))
          res.status(200).json(new QuoteResponse(true, quote, 'Success'));
       } catch (error) {
          console.error(error);
