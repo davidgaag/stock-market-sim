@@ -3,12 +3,14 @@ import { getQuote } from '../net/finnhub.js';
 import { getAuthToken, getDynamicAssetData, putDynamicAssetData } from '../db/redis/Redis.js';
 import { invalidRequest, serverError, unauthorized } from '../app.js';
 import { Quote } from '../../shared/model/domain/Quote.js';
-import { QuoteResponse } from '../../shared/model/net/Response.js';
+import { PortfolioResponse, QuoteResponse } from '../../shared/model/net/Response.js';
+import { Holding } from '../../shared/model/domain/Holding.js';
+import { buyTransaction, getHoldings, sellTransaction } from '../db/postgres/SimulatorDao.js';
 
 const router = Router();
 
 // Middleware to check auth token validity
-router.use((req, res, next) => {
+router.use(async (req, res, next) => {
    console.log("API request: " + req.url + " " + JSON.stringify(req.body));
 
    if (!req.body.authToken) {
@@ -17,7 +19,7 @@ router.use((req, res, next) => {
    }
 
    const authToken = req.body.authToken._token; // TODO: underscore?
-   const userId = getAuthToken(authToken);
+   const userId = await getAuthToken(authToken);
    if (!userId) {
       res.status(401).json(unauthorized);
    } else {
@@ -26,43 +28,16 @@ router.use((req, res, next) => {
    }
 });
 
-router.post('/portfolio', (req, res) => {
-   // TODO: Implement this
-   res.status(501).send('Not implemented');
-});
+router.post('/portfolio', async (req, res) => {
+   const resRows = await getHoldings(req.userId);
 
-router.post('/trade', (req, res) => {
-   // TODO: Implement this
-   res.status(501).send('Not implemented');
-});
-
-router.post('/quote/:symbol', async (req, res) => {
-   const symbol = req.params.symbol.toUpperCase();
-   if (isValidTicker(symbol)) {
-      let quoteData = await getDynamicAssetData(symbol);
-      console.log("Quote data redis: ", JSON.stringify(quoteData));
-
-      if (Object.keys(quoteData).length === 0) {
-         quoteData = await new Promise((resolve, reject) => {
-            getQuote(symbol, (error, data) => {
-               if (error) {
-                  reject(error);
-                  return;
-               }
-
-               const normalizedQuote = normalizeQuoteData(data);
-               console.log("Quote data API: ", JSON.stringify(normalizedQuote));
-               resolve(normalizedQuote);
-            });
-         }).catch((error) => {
-            res.status(500).json(serverError);
-            return;
-         });
-         putDynamicAssetData(symbol, quoteData);
+   const holdings = await Promise.all(resRows.map(async row => {
+      if (row.symbol === '$CASH$') {
+         return new Holding(row.symbol, row.quantity, null, row.purchase_price);
       }
-
+      const quoteData = normalizeQuoteData(await getQuote(row.symbol));
       const quote = new Quote(
-         symbol,
+         row.symbol,
          quoteData.currentPrice,
          quoteData.change,
          quoteData.percentChange,
@@ -71,8 +46,84 @@ router.post('/quote/:symbol', async (req, res) => {
          quoteData.openPrice,
          quoteData.previousClose
       );
-      console.log("Quote response: ", JSON.stringify(quote))
-      res.status(200).json(new QuoteResponse(true, quote, 'Success'));
+      return new Holding(row.symbol, row.quantity, quote, row.purchase_price);
+   }));
+
+   console.log("Holdings: ", JSON.stringify(holdings));
+   res.status(200).json(new PortfolioResponse(true, holdings, 'Success'));
+});
+
+router.post('/trade', async (req, res) => {
+   if (!req.body.type || !req.body.symbol || !req.body.shares) {
+      res.status(400).json(invalidRequest);
+      return;
+   }
+
+   if (req.body.type !== 'buy' && req.body.type !== 'sell') {
+      res.status(400).json(invalidRequest);
+      return;
+   }
+
+   if (!parseInt(req.body.shares)) {
+      res.status(400).json(invalidRequest);
+      return;
+   }
+
+   const type = req.body.type;
+   const symbol = req.body.symbol;
+   const shares = parseInt(req.body.shares);
+   console.log("req.userId: ", req.userId);
+   try {
+      if (type === 'buy') {
+         await buyTransaction(req.userId, symbol, shares);
+      } else {
+         await sellTransaction(req.userId, symbol, shares);
+      }
+      res.status(200).json({ success: true });
+   } catch (error) {
+      console.error(error);
+      if (error.message === 'Insufficient funds' ||
+         error.message === 'No shares to sell' ||
+         error.message === 'Insufficient shares' ||
+         error.message === 'Invalid symbol') {
+         res.status(400).json(invalidRequest);
+      } else {
+         console.error(error);
+         res.status(500).json(serverError);
+      }
+   }
+});
+
+router.post('/quote/:symbol', async (req, res) => {
+   const symbol = req.params.symbol.toUpperCase();
+   if (isValidTicker(symbol)) {
+      try {
+         let quoteData = await getDynamicAssetData(symbol);
+         console.log("Quote data redis: ", JSON.stringify(quoteData));
+
+         if (Object.keys(quoteData).length === 0) {
+            const data = await getQuote(symbol);
+            quoteData = normalizeQuoteData(data);
+            console.log("Quote data API: ", JSON.stringify(quoteData));
+            putDynamicAssetData(symbol, quoteData);
+         }
+
+         const quote = new Quote(
+            symbol,
+            quoteData.currentPrice,
+            quoteData.change,
+            quoteData.percentChange,
+            quoteData.dailyHigh,
+            quoteData.dailyLow,
+            quoteData.openPrice,
+            quoteData.previousClose
+         );
+         console.log("Quote response: ", JSON.stringify(quote))
+         res.status(200).json(new QuoteResponse(true, quote, 'Success'));
+      } catch (error) {
+         console.error(error);
+         res.status(500).json(serverError);
+      }
    } else {
       res.status(400).json(invalidRequest);
    }

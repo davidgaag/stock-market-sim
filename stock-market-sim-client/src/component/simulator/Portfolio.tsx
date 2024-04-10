@@ -1,3 +1,4 @@
+import './Portfolio.css'
 import { useEffect, useState } from 'react';
 import { Holding } from 'stock-market-sim-shared';
 import { PortfolioPresenter, PortfolioView } from '../../presenter/PortfolioPresenter';
@@ -39,29 +40,34 @@ const Portfolio = () => {
    return (
       <div>
          <h1>Portfolio</h1>
-         <p>Current Value: {currValue}</p>
-         <p>Cash Value: {cashValue}</p>
-         <p>Market Value: {marketValue}</p>
-         <p>Day Change: {dayChange}</p>
+         <p>Current Value: {currValue.toFixed(2)}</p>
+         <p>Cash Value: {cashValue.toFixed(2)}</p>
+         <p>Market Value: {marketValue.toFixed(2)}</p>
+         <p>Day Change: {dayChange.toFixed(2)}</p>
          <table>
             <thead>
                <tr>
                   <th>Symbol</th>
                   <th>Shares</th>
-                  <th>Price</th>
-                  <th>Value</th>
+                  <th>Current Price</th>
+                  <th>Cost Basis</th>
+                  <th>Market Value</th>
+                  <th>Day Change</th>
                </tr>
             </thead>
             <tbody>
-               {holdings.map((holding) => (
-                  <tr key={holding.symbol}>
-                     <td>{holding.symbol}</td>
-                     <td>{holding.shares}</td>
-                     <td>{holding.value}</td>
-                     <td>{holding.costBasis}</td>
-                     <td>{holding.dayChange}</td>
-                  </tr>
-               ))}
+               {holdings.map((holding, index) => {
+                  return (
+                     <tr key={index}>
+                        <td>{holding.symbol}</td>
+                        <td>{holding.shares}</td>
+                        <td>{holding.quote.currentPrice.toFixed(2)}</td>
+                        <td>{(holding.shares * holding.costBasis).toFixed(2)}</td>
+                        <td>{(holding.shares * holding.quote.currentPrice).toFixed(2)}</td>
+                        <td>{(holding.shares * holding.quote.change).toFixed(2)}</td>
+                     </tr>
+                  );
+               })}
             </tbody>
          </table>
       </div>

@@ -27,11 +27,11 @@ export class PortfolioPresenter extends Presenter<PortfolioView> {
       for (let i = 0; i < holdings.length; i++) {
          const holding = holdings[i];
          if (holding.symbol === "$CASH$") {
-            cashValue = holding.value;
+            cashValue = Number(holding.costBasis);
             indexOfCash = i;
          } else {
-            marketValue += holding.value;
-            dayChange += holding.dayChange;
+            marketValue += holding.shares * holding.quote.currentPrice;
+            dayChange += holding.shares * holding.quote.change;
          }
       }
 
@@ -39,8 +39,10 @@ export class PortfolioPresenter extends Presenter<PortfolioView> {
          holdings = holdings.slice(0, indexOfCash).concat(holdings.slice(indexOfCash + 1));
       }
 
+      console.log('marketVal: ', marketValue, typeof marketValue, 'cashVal: ', cashValue, typeof cashValue, 'dayChange: ', dayChange, typeof dayChange);
+
       this.view.setHoldings(holdings);
-      this.view.setCurrValue(marketValue + cashValue);
+      this.view.setCurrValue(marketValue + Number(cashValue));
       this.view.setMarketValue(marketValue);
       this.view.setCashValue(cashValue);
       this.view.setDayChange(dayChange);

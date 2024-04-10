@@ -19,7 +19,7 @@ export class ClientCommunicator {
       try {
          const resp: Response = await fetch(url, request);
          if (resp.ok) {
-            console.log(resp);
+            console.log(JSON.stringify(resp.body));
             const response: JSON = await resp.json();
             return response;
          } else {

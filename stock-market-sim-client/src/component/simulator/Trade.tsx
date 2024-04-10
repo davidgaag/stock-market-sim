@@ -23,6 +23,7 @@ const Trade = () => {
       presenter.trade(authToken!, tradeType, symbol, shares);
       setSymbol("");
       setShares(0);
+      setTradeType(TradeType.Buy);
    }
 
    return (
@@ -30,18 +31,18 @@ const Trade = () => {
          <h1>Trade</h1>
          <label>
             Symbol:
-            <input type="text" onChange={e => setSymbol(e.target.value)} />
+            <input type="text" value={symbol} onChange={e => setSymbol(e.target.value)} />
          </label>
          <label>
             Shares:
-            <input type="number" onChange={e => setShares(parseInt(e.target.value))} />
+            <input type="number" value={shares} onChange={e => setShares(parseInt(e.target.value))} />
          </label>
          <label>
-            <input type="radio" name="tradeType" value="Buy" onClick={() => setTradeType(TradeType.Buy)} />
+            <input type="radio" name="tradeType" value="Buy" checked={tradeType == TradeType.Buy} onChange={() => setTradeType(TradeType.Buy)} />
             Buy
          </label>
          <label>
-            <input type="radio" name="tradeType" value="Sell" onClick={() => setTradeType(TradeType.Sell)} />
+            <input type="radio" name="tradeType" value="Sell" checked={tradeType == TradeType.Sell} onChange={() => setTradeType(TradeType.Sell)} />
             Sell
          </label>
          <button onClick={trade}>Trade</button>

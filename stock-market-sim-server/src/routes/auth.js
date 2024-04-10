@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getUser, putUser } from '../db/postgres/UserDao.js';
+import { putHolding } from '../db/postgres/SimulatorDao.js';
 import { putAuthToken, deleteAuthToken } from '../db/redis/Redis.js';
 import { User } from '../../shared/model/domain/User.js';
 import { AuthToken } from '../../shared/model/domain/AuthToken.js';
@@ -54,6 +55,7 @@ router.post('/register', async (req, res) => {
    const user = generateFakeUser(username);
    const token = AuthToken.Generate();
    await putAuthToken(token.token, userRow.id);
+   await putHolding(userRow.id, '$CASH$', 0, 100_000);
    res.status(201).json(generateAuthResponse(user, token));
 });
 
@@ -63,7 +65,7 @@ router.post('/logout', async (req, res) => {
       return;
    }
 
-   const token = req.body.token;
+   const token = req.body.authToken._token; // TODO: underscore?
    await deleteAuthToken(token);
    res.status(200).json(new AppResponse(true, 'Logout successful'));
 });

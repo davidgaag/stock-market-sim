@@ -42,11 +42,12 @@ async function getDynamicAssetData(symbol) {
 }
 
 async function putAuthToken(authToken, userId) {
-   await client.set(authToken, userId, { EX: 60 * 60 * 24 });
+   await client.set(`auth:${authToken}`, userId, { EX: 60 * 60 * 24 });
 }
 
 async function getAuthToken(authToken) {
-   return await client.get(authToken);
+   const res = await client.get(`auth:${authToken}`);
+   return res ? parseInt(res) : null;
 }
 
 async function deleteAuthToken(authToken) {

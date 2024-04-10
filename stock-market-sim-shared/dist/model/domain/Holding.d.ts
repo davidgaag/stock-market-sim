@@ -1,10 +1,9 @@
+import { Quote } from "./Quote.js";
 export declare class Holding {
     symbol: string;
     shares: number;
-    value: number;
+    quote: Quote;
     costBasis: number;
-    dayChange: number;
-    yesterdayValue: number | null;
-    constructor(symbol: string, shares: number, value: number, costBasis: number, dayChange: number, yesterdayValue: number | null);
+    constructor(symbol: string, shares: number, quote: Quote, costBasis: number);
     static fromJson(json: string): Holding;
 }

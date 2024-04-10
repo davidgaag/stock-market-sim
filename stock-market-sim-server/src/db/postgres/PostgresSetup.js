@@ -29,20 +29,22 @@ function createTables() {
       purchase_price DECIMAL NOT NULL
    )`);
 
-   client.query(`CREATE TABLE IF NOT EXISTS app_transaction (
-      id SERIAL PRIMARY KEY,
-      user_id INT REFERENCES app_user(id),
-      symbol TEXT NOT NULL,
-      quantity INT NOT NULL,
-      price DECIMAL NOT NULL,
-      created_at DATE NOT NULL
-   )`);
+   // TODO: delete or use this table in the future
+   // client.query(`CREATE TABLE IF NOT EXISTS app_transaction (
+   //    id SERIAL PRIMARY KEY,
+   //    user_id INT REFERENCES app_user(id),
+   //    symbol TEXT NOT NULL,
+   //    quantity INT NOT NULL,
+   //    price DECIMAL NOT NULL,
+   //    created_at DATE NOT NULL
+   // )`);
 
-   client.query(`CREATE TABLE IF NOT EXISTS asset (
-      id SERIAL PRIMARY KEY,
-      symbol TEXT UNIQUE NOT NULL,
-      name TEXT NOT NULL
-   )`);
+   // TODO: delete table? functionality exists in Redis DAO, but not used currently
+   // client.query(`CREATE TABLE IF NOT EXISTS asset (
+   //    id SERIAL PRIMARY KEY,
+   //    symbol TEXT UNIQUE NOT NULL,
+   //    name TEXT NOT NULL
+   // )`);
 }
 
 createTables();
