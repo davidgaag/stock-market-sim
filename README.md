@@ -1,1 +1,1 @@
-Stock market simulator app in React built to learn database design and implementation, using technologies such as Redis and PostgreSQL.
+Stock market simulator app in React built to learn database design and implementation, using technologies such as Redis and PostgreSQL. Integrates with real market data using Finnhub API, using Redis caching to improve performance and minimize API calls.
